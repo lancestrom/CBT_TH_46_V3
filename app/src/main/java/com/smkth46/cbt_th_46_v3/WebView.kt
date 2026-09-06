@@ -1,6 +1,7 @@
 package com.smkth46.cbt_th_46_v3
 
 import android.os.Bundle
+import android.util.Base64
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
@@ -36,7 +37,8 @@ class WebView : AppCompatActivity() {
             }
         }
         
-        val baseUrl = BuildConfig.BASE_URL
+        val encryptedUrl = BuildConfig.ENCRYPTED_URL
+        val baseUrl = decryptUrl(encryptedUrl)
         webView.loadUrl("http://$baseUrl/cbt2.6client")
 
         swipeRefresh.setOnRefreshListener {
@@ -53,5 +55,13 @@ class WebView : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun decryptUrl(encrypted: String): String {
+        val key = "CBT_SECRET_KEY"
+        val decoded = String(Base64.decode(encrypted, Base64.DEFAULT))
+        return decoded.mapIndexed { index, char ->
+            (char.code xor key[index % key.length].code).toChar()
+        }.joinToString("")
     }
 }
