@@ -36,7 +36,8 @@ class WebView : AppCompatActivity() {
             }
         }
         
-        webView.loadUrl("http://103.103.20.61/cbt2.6client")
+        val baseUrl = BuildConfig.BASE_URL
+        webView.loadUrl("http://$baseUrl/cbt2.6client")
 
         swipeRefresh.setOnRefreshListener {
             webView.reload()

@@ -1,6 +1,15 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
+val properties = Properties()
+val localPropertiesFile = project.rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    properties.load(localPropertiesFile.inputStream())
+}
+val baseUrlValue = properties.getProperty("base_url") ?: "103.103.20.61"
 
 android {
     namespace = "com.smkth46.cbt_th_46_v3"
@@ -16,6 +25,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "BASE_URL", "\"$baseUrlValue\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
